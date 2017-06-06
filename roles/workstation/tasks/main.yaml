@@ -1,5 +1,5 @@
 - name: Install our base packages
-  package: pkg={{item}} state=present
+  dnf: pkg={{item}} state=present
   with_items:
   - screen
   - pidgin
@@ -17,7 +17,7 @@
   - setroubleshoot
 
 - name: Remove unneeded packages
-  package: pkg={{item}} state=absent
+  dnf: pkg={{item}} state=absent
   with_items:
   - xfdashboard
   - xfburn
