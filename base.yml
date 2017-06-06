@@ -1,0 +1,5 @@
+- name: Push base role
+  hosts: all
+  roles:
+    - base
+

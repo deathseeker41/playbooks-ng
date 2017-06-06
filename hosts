@@ -1,0 +1,18 @@
+[centos]
+tor1.deathsfolly.net
+zombie.deathsfolly.net
+thor.deathsfolly.net
+jupiter.valhalla
+granite.valhalla
+janus.valhalla
+10.200.0.17
+10.200.0.18
+centos1.valhalla
+10.200.0.13
+grafana.valhalla
+#librenms.valhalla
+
+#pxe test
+104.247.79.163
+[vyos]
+216.194.170.108

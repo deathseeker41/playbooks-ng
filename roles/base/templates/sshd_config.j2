@@ -1,0 +1,9 @@
+#{{ ansible_managed }}
+PermitRootLogin without-password
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+UsePAM yes
+PrintMotd no
+UseDNS no
+UsePrivilegeSeparation sandbox
+Subsystem sftp /usr/libexec/openssh/sftp-server
