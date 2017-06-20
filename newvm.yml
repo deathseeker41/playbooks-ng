@@ -1,0 +1,15 @@
+---
+- name: Create VM
+  hosts: kvm
+  gather_facts: no
+  tasks:
+    - name: Clone VM
+      command: virt-clone --original ce7clone --name {{vm_hostname}} --file /dev/{{kvm_vg}}/{{vm_hostname}}.qcow2
+    - name: Sysprep VM
+      command: virt-sysprep -d {{vm_hostname}} --hostname {{vm_hostname}} --ssh-inject root:file:/root/.ssh/authorized_keys --selinux-relabel
+    - name: Start/Autoboot VM
+      virt: name={{vm_hostname}} state=running autostart=true
+  vars_prompt:
+    - name: "vm_hostname"
+      prompt: "Enter VM hostname"
+      private: no

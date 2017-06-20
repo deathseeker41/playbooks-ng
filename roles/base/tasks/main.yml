@@ -8,12 +8,23 @@
   - restart sshd
 
 - name: Install base packages
-  package: name={{ item }}
+  yum: name={{ item }}
     state=present
   with_items:
     - nano
     - epel-release
     - mtr
+    - rsync
+    - screen
+    - wget
+
+- name: Disable NetworkManager
+  service: name=NetworkManager state=stopped enabled=no
+  notify:
+    - restart network
+
+- name: Setup root forwarder
+  copy: content={{ admin_email }} dest=/root/.forward owner=0 group=0 mode=600
 
 #- name: Install InfluxDB repo
 #  copy:

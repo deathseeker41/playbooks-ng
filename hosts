@@ -1,18 +1,21 @@
 [centos]
-tor1.deathsfolly.net
-zombie.deathsfolly.net
 thor.deathsfolly.net
 jupiter.valhalla
-granite.valhalla
-janus.valhalla
-10.200.0.17
-10.200.0.18
-centos1.valhalla
-10.200.0.13
-grafana.valhalla
-#librenms.valhalla
+nessus.valhalla
+centos2.valhalla
+netbox.valhalla
+metrics.valhalla
+fortnight.valhalla
 
-#pxe test
-104.247.79.163
-[vyos]
-216.194.170.108
+[centos:children]
+kvm
+
+[kvm]
+black.valhalla kvm_vg=cl_black
+war.deathsfolly.net kvm_vg=vms
+
+#[vyos]
+#216.194.170.108
+
+[backuptarget]
+jupiter.valhalla
