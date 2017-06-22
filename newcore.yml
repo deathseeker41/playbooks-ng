@@ -1,6 +1,6 @@
 ---
 - name: Create VM
-  hosts: kvm
+  hosts: war.deathsfolly.net
   gather_facts: no
   tasks:
     - name: Spawn Core
@@ -12,6 +12,7 @@
       virt:
         name: "{{ coreos_hostname }}"
         state: running
+        autostart: true
   vars_prompt:
     - name: "coreos_hostname"
       prompt: "Enter Core hostname"
