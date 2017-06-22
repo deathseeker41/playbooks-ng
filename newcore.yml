@@ -1,0 +1,19 @@
+---
+- name: Create VM
+  hosts: kvm
+  gather_facts: no
+  tasks:
+    - name: Spawn Core
+      virt:
+        name: "{{ coreos_hostname }}"
+        command: define
+        xml: "{{ lookup('template', 'coreos.xml.j2') }}"
+    - name: Start Core
+      virt:
+        name: "{{ coreos_hostname }}"
+        state: running
+  vars_prompt:
+    - name: "coreos_hostname"
+      prompt: "Enter Core hostname"
+      private: no
+

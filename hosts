@@ -16,6 +16,3 @@ war.deathsfolly.net kvm_vg=vms
 
 #[vyos]
 #216.194.170.108
-
-[backuptarget]
-jupiter.valhalla
