@@ -11,8 +11,9 @@ fortnight.valhalla
 kvm
 
 [kvm]
-black.valhalla kvm_vg=cl_black
-war.deathsfolly.net kvm_vg=vms
+black.valhalla kvm_vg=cl_black kvm_net=docker-lan
+war.deathsfolly.net kvm_vg=vms kvm_net=qa-lan
 
-#[vyos]
-#216.194.170.108
+[vyos]
+router1.deathsfolly.net
+192.168.1.1

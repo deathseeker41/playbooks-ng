@@ -1,8 +1,16 @@
 ---
 - name: Create VM
-  hosts: war.deathsfolly.net
+  hosts: kvm
   gather_facts: no
   tasks:
+    - name: Ensure CoreOS kernel exists
+      get_url:
+        url: https://stable.release.core-os.net/amd64-usr/current/coreos_production_pxe.vmlinuz
+        dest: /var/lib/libvirt/images/coreos_production_pxe.vmlinuz
+    - name: Ensure CoreOS initrd exists
+      get_url:
+        url: https://stable.release.core-os.net/amd64-usr/current/coreos_production_pxe_image.cpio.gz
+        dest: /var/lib/libvirt/images/coreos_production_pxe_image.cpio.gz
     - name: Spawn Core
       virt:
         name: "{{ coreos_hostname }}"
