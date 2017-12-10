@@ -1,3 +1,10 @@
+- name: Check OS
+  assert:
+    that:
+    - "ansible_distribution == 'CentOS'"
+    - "ansible_distribution_major_version == '7'"
+    msg: "Unsupported OS: {{ansible_distribution}} {{ansible_distribution_major_version}}"
+
 - name: Install sshd_config
   template: src=sshd_config.j2
     dest=/etc/ssh/sshd_config
@@ -6,6 +13,11 @@
     validate='/usr/sbin/sshd -T -f %s'
   notify:
   - restart sshd
+
+- name: Install InfluxDB repo
+  copy:
+    src: influxdb.repo
+    dest: /etc/yum.repos.d/influxdb.repo
 
 - name: Install base packages
   yum: name={{ item }}
@@ -17,6 +29,8 @@
     - rsync
     - screen
     - wget
+    - telegraf
+    - deltarpm
 
 - name: Disable NetworkManager
   service: name=NetworkManager state=stopped enabled=no
@@ -24,9 +38,12 @@
     - restart network
 
 - name: Setup root forwarder
-  copy: content={{ admin_email }} dest=/root/.forward owner=0 group=0 mode=600
+  copy: content={{ admin_email }} dest=/root/.forward owner=0 group=0 mode=0600
 
-#- name: Install InfluxDB repo
-#  copy:
-#    src: influxdb.repo
-#    dest: /etc/yum.repos.d/influxdb.repo
+- name: Install telegraf config
+  template: src=telegraf.conf.j2 dest=/etc/telegraf/telegraf.conf
+  notify:
+    - reload telegraf
+
+- name: Start and enable telegraf
+  service: name=telegraf state=started enabled=yes

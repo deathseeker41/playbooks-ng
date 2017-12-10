@@ -3,3 +3,5 @@
   service: name=sshd state=restarted
 - name: restart network
   service: name=network state=restarted
+- name: reload telegraf
+  service: name=telegraf state=reloaded
