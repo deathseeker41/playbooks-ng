@@ -1,0 +1,27 @@
+- name: Check OS
+  assert:
+    that:
+    - "ansible_distribution == 'CentOS'"
+    - "ansible_distribution_major_version == '7'"
+    msg: "Unsupported OS: {{ansible_distribution}} {{ansible_distribution_major_version}}"
+
+- name: Install QEMU EV repo
+  yum: name=centos-release-qemu-ev
+    state=present
+
+- name: Install KVM packages
+  yum: name={{ item }}
+    state=present
+  with_items:
+    - libvirt
+    - qemu-kvm-ev
+    - libvirt-python
+    - virt-top
+    - python-lxml
+    - virt-install
+
+- name: Start and enable libvirt
+  service: name=libvirtd state=started enabled=yes
+
+- name: Remove default network
+  virt_net: name=default state=absent

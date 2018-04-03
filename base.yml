@@ -1,5 +1,4 @@
 - name: Push base role
-  hosts: all
+  hosts: centos
   roles:
     - base
-

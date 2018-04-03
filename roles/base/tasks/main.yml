@@ -9,7 +9,7 @@
   template: src=sshd_config.j2
     dest=/etc/ssh/sshd_config
     backup=yes
-    owner=0 group=0 mode=0644
+    owner=0 group=0 mode=0600
     validate='/usr/sbin/sshd -T -f %s'
   notify:
   - restart sshd
@@ -44,6 +44,12 @@
   template: src=telegraf.conf.j2 dest=/etc/telegraf/telegraf.conf
   notify:
     - reload telegraf
+
+- name: Install telegraf sudo rules
+  copy:
+    src: telegraf.sudo
+    dest: /etc/sudoers.d/telegraf
+  when: ansible_virtualization_role == 'host'
 
 - name: Start and enable telegraf
   service: name=telegraf state=started enabled=yes

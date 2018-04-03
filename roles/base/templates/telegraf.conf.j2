@@ -149,7 +149,10 @@
 
 
 # Read metrics about disk IO by device
+{% if ansible_virtualization_type == 'openvz' and ansible_virtualization_role == 'guest' -%}
+{% else -%}
 [[inputs.diskio]]
+{% endif -%}
   ## By default, telegraf will gather stats for all devices including
   ## disk partitions.
   ## Setting devices will restrict the stats to the specified devices.
@@ -365,7 +368,10 @@
 
 [[inputs.netstat]]
 
-{% if ansible_virtualization_role == "host" -%}
-[[inputs.ipmi_sensor]]
-interval = "1m"
+{% if ansible_virtualization_role == 'host' -%}
+[[inputs.smart]]
+use_sudo = true
+attributes = true
+interval = "30m"
 {% endif -%}
+
