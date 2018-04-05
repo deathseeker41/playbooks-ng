@@ -1,0 +1,54 @@
+---
+- name: LetsEncrypt Renewal
+  hosts: 127.0.0.1
+  gather_facts: no
+  tasks:
+    - name: Create LE account private key
+      openssl_privatekey:
+        path: "private/ssl/letsencrypt.key"
+    - name: Create cert private key
+      openssl_privatekey:
+        path: "private/ssl/{{ssl_domain}}.key"
+    - name: Create CSR
+      openssl_csr:
+        path: "private/ssl/{{ssl_domain}}.csr"
+        privatekey_path: "private/ssl/{{ssl_domain}}.key"
+        common_name: "{{ssl_domain}}"
+    - name: Create challenge
+      letsencrypt:
+        account_key_src: "private/ssl/letsencrypt.key"
+        account_email: "{{admin_email}}"
+        src: "private/ssl/{{ssl_domain}}.csr"
+        cert: "private/ssl/{{ssl_domain}}.crt"
+        challenge: dns-01
+        acme_directory: https://acme-staging-v02.api.letsencrypt.org/directory
+        remaining_days: 10
+        acme_version: 2
+        terms_agreed: yes
+      register: cert_challenge
+    - name: Create DNS record
+      cloudflare_dns:
+        account_email: "{{admin_email}}"
+        account_api_token: "{{cloudflare_key}}"
+        ttl: 120
+        type: TXT
+        record: "{{ cert_challenge.challenge_data[ssl_domain]['dns-01'].record }}"
+        value: "{{ cert_challenge.challenge_data[ssl_domain]['dns-01'].resource_value }}"
+        zone: deathsfolly.net
+    - name: Validate challenge
+      letsencrypt:
+        account_key_src: "private/ssl/letsencrypt.key"
+        account_email: "{{admin_email}}"
+        src: "private/ssl/{{ssl_domain}}.csr"
+        cert: "private/ssl/{{ssl_domain}}.crt"
+        challenge: dns-01
+        acme_directory: https://acme-staging-v02.api.letsencrypt.org/directory
+        remaining_days: 10
+        acme_version: 2
+        data: "{{cert_challenge}}"
+        terms_agreed: yes
+        fullchain_dest: "private/ssl/issued/{{ssl_domain}}.crt"
+  vars_prompt:
+    - name: "ssl_domain"
+      prompt: "SSL Domain"
+      private: no
