@@ -28,11 +28,15 @@
     - kubeadm
     - kubectl
 
-- name: Enable/start kubernetes services
-  service: name={{item}} state=started enabled=yes
-  with_items:
-    - docker
-    - kubelet
+- name: Install kubelet sysconfig
+  template: src=kubelet.config dest=/etc/sysconfig/kubelet
+  notify:
+    - restart kubelet
+
+- name: Install docker sysconfig
+  template: src=docker.config dest=/etc/sysconfig/docker
+  notify:
+    - reload docker
 
 - name: Open kubernetes ports
   firewalld: port={{item}} permanent=true state=enabled immediate=yes
@@ -44,3 +48,11 @@
     - "10252/tcp"
     - "10255/tcp"
     - "30000-32767/tcp"
+    - "8472/udp"
+
+- name: Enable/start kubernetes services
+  service: name={{item}} state=started enabled=yes
+  with_items:
+    - docker
+    - kubelet
+
