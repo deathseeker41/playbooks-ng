@@ -1,0 +1,108 @@
+- name: Generate node key
+  openssl_privatekey:
+    path: private/kubernetes/{{ ansible_fqdn }}-node.key
+  delegate_to: 127.0.0.1
+
+- name: Generate node CSR
+  openssl_csr:
+    path: private/kubernetes/{{ ansible_fqdn }}-node.csr
+    privatekey_path: private/kubernetes/{{ ansible_fqdn }}-node.key
+    common_name: "system:node:{{ ansible_fqdn }}"
+    organization_name: 'system:nodes'
+    subject_alt_name: "IP:{{ ansible_default_ipv4['address'] }}"
+  delegate_to: 127.0.0.1
+
+#TODO: use openssl_certificate once https://github.com/ansible/ansible/commit/b61b113fb9e3fcfcb25f4a8aaabad618e3209ce1 is released
+- name: Sign node CSR
+  command: openssl x509 -req -in private/kubernetes/{{ ansible_fqdn }}-node.csr -CA private/kubernetes/ca.crt -CAkey private/kubernetes/ca.key -out private/kubernetes/{{ ansible_fqdn }}-node.crt creates=private/kubernetes/{{ ansible_fqdn }}-node.crt
+  delegate_to: 127.0.0.1
+
+- name: Generate controller key
+  openssl_privatekey:
+    path: private/kubernetes/{{ ansible_fqdn }}-controller.key
+  delegate_to: 127.0.0.1
+
+- name: Generate controller CSR
+  openssl_csr:
+    path: private/kubernetes/{{ ansible_fqdn }}-controller.csr
+    privatekey_path: private/kubernetes/{{ ansible_fqdn }}-controller.key
+    common_name: "system:kube-controller-manager"
+    organization_name: 'system:kube-controller-manager'
+  delegate_to: 127.0.0.1
+
+#TODO: use openssl_certificate once https://github.com/ansible/ansible/commit/b61b113fb9e3fcfcb25f4a8aaabad618e3209ce1 is released
+- name: Sign controller CSR
+  command: openssl x509 -req -in private/kubernetes/{{ ansible_fqdn }}-controller.csr -CA private/kubernetes/ca.crt -CAkey private/kubernetes/ca.key -out private/kubernetes/{{ ansible_fqdn }}-controller.crt creates=private/kubernetes/{{ ansible_fqdn }}-controller.crt
+  delegate_to: 127.0.0.1
+
+- name: Generate kube-proxy key
+  openssl_privatekey:
+    path: private/kubernetes/{{ ansible_fqdn }}-proxy.key
+  delegate_to: 127.0.0.1
+
+- name: Generate kube-proxy CSR
+  openssl_csr:
+    path: private/kubernetes/{{ ansible_fqdn }}-proxy.csr
+    privatekey_path: private/kubernetes/{{ ansible_fqdn }}-proxy.key
+    common_name: "system:kube-proxy"
+    organization_name: 'system:node-proxier'
+  delegate_to: 127.0.0.1
+
+#TODO: use openssl_certificate once https://github.com/ansible/ansible/commit/b61b113fb9e3fcfcb25f4a8aaabad618e3209ce1 is released
+- name: Sign kube-proxy CSR
+  command: openssl x509 -req -in private/kubernetes/{{ ansible_fqdn }}-proxy.csr -CA private/kubernetes/ca.crt -CAkey private/kubernetes/ca.key -out private/kubernetes/{{ ansible_fqdn }}-proxy.crt creates=private/kubernetes/{{ ansible_fqdn }}-proxy.crt
+  delegate_to: 127.0.0.1
+
+- name: Generate scheduler key
+  openssl_privatekey:
+    path: private/kubernetes/{{ ansible_fqdn }}-scheduler.key
+  delegate_to: 127.0.0.1
+
+- name: Generate scheduler CSR
+  openssl_csr:
+    path: private/kubernetes/{{ ansible_fqdn }}-scheduler.csr
+    privatekey_path: private/kubernetes/{{ ansible_fqdn }}-scheduler.key
+    common_name: "system:kube-scheduler"
+    organization_name: 'system:kube-scheduler'
+  delegate_to: 127.0.0.1
+
+#TODO: use openssl_certificate once https://github.com/ansible/ansible/commit/b61b113fb9e3fcfcb25f4a8aaabad618e3209ce1 is released
+- name: Sign scheduler CSR
+  command: openssl x509 -req -in private/kubernetes/{{ ansible_fqdn }}-scheduler.csr -CA private/kubernetes/ca.crt -CAkey private/kubernetes/ca.key -out private/kubernetes/{{ ansible_fqdn }}-scheduler.crt creates=private/kubernetes/{{ ansible_fqdn }}-scheduler.crt
+  delegate_to: 127.0.0.1
+
+- name: Generate API key
+  openssl_privatekey:
+    path: private/kubernetes/{{ ansible_fqdn }}-api.key
+  delegate_to: 127.0.0.1
+
+- name: Generate API CSR
+  openssl_csr:
+    path: private/kubernetes/{{ ansible_fqdn }}-api.csr
+    privatekey_path: private/kubernetes/{{ ansible_fqdn }}-api.key
+    common_name: "kubernetes"
+    subject_alt_name: "IP:{{ ansible_default_ipv4['address'] }}"
+  delegate_to: 127.0.0.1
+
+#TODO: use openssl_certificate once https://github.com/ansible/ansible/commit/b61b113fb9e3fcfcb25f4a8aaabad618e3209ce1 is released
+- name: Sign API CSR
+  command: openssl x509 -req -in private/kubernetes/{{ ansible_fqdn }}-api.csr -CA private/kubernetes/ca.crt -CAkey private/kubernetes/ca.key -out private/kubernetes/{{ ansible_fqdn }}-api.crt creates=private/kubernetes/{{ ansible_fqdn }}-api.crt
+  delegate_to: 127.0.0.1
+
+- name: Generate service account key
+  openssl_privatekey:
+    path: private/kubernetes/{{ ansible_fqdn }}-sa.key
+  delegate_to: 127.0.0.1
+
+- name: Generate service account CSR
+  openssl_csr:
+    path: private/kubernetes/{{ ansible_fqdn }}-sa.csr
+    privatekey_path: private/kubernetes/{{ ansible_fqdn }}-sa.key
+    common_name: "service-accounts"
+  delegate_to: 127.0.0.1
+
+#TODO: use openssl_certificate once https://github.com/ansible/ansible/commit/b61b113fb9e3fcfcb25f4a8aaabad618e3209ce1 is released
+- name: Sign service account CSR
+  command: openssl x509 -req -in private/kubernetes/{{ ansible_fqdn }}-sa.csr -CA private/kubernetes/ca.crt -CAkey private/kubernetes/ca.key -out private/kubernetes/{{ ansible_fqdn }}-sa.crt creates=private/kubernetes/{{ ansible_fqdn }}-sa.crt
+  delegate_to: 127.0.0.1
+
