@@ -1,0 +1,30 @@
+- name: Generate monitor keyring
+  command: ceph-authtool --create-keyring /tmp/ceph.mon.keyring --gen-key -n mon. --cap mon 'allow *'
+
+- name: Add keys to monitor keyring
+  command: "{{item}}"
+  with_items:
+    - ceph-authtool /tmp/ceph.mon.keyring --import-keyring /etc/ceph/ceph.client.admin.keyring
+    - ceph-authtool /tmp/ceph.mon.keyring --import-keyring /var/lib/ceph/bootstrap-osd/ceph.keyring
+
+- name: Generate monmap
+  command: monmaptool --create --add {{ansible_hostname}} {{ansible_default_ipv4['address']}} --fsid {{ceph_fsid}} /tmp/monmap --clobber
+
+- name: Populate monitor data
+  command: ceph-mon --mkfs -i {{ansible_hostname}} --monmap /tmp/monmap --keyring /tmp/ceph.mon.keyring
+
+- name: Mark monitor done
+  file: path=/var/lib/ceph/mon/ceph-{{ansible_hostname}}/done state=touch
+
+- name: Remove temp files
+  file: path={{item}} state=absent
+  with_items:
+    - /tmp/ceph.mon.keyring
+    - /tmp/monmap
+
+- name: Ensure safe permissions of monitor dir
+  file: path=/var/lib/ceph/mon/ceph-{{ansible_hostname}}/ owner=ceph group=ceph recurse=yes
+
+- name: Enable/start bootstrap monitor
+  service: name=ceph-mon@{{ansible_hostname}} state=started enabled=yes
+

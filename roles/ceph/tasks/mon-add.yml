@@ -1,0 +1,17 @@
+- name: Retrive monitor keyring
+  command: ceph auth get mon. -o /tmp/monkeys
+
+- name: Retrieve monmap
+  command: ceph mon getmap -o /tmp/monmap
+
+- name: Populate monitor data
+  command: ceph-mon --mkfs -i {{ansible_hostname}} --monmap /tmp/monmap --keyring /tmp/monkeys
+
+- name: Mark monitor done
+  file: path=/var/lib/ceph/mon/ceph-{{ansible_hostname}}/done state=touch
+
+- name: Remove temp files
+  file: path={{item}} state=absent
+  with_items:
+    - /tmp/monkeys
+    - /tmp/monmap

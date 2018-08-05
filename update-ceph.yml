@@ -1,0 +1,15 @@
+---
+- name: Update Ceph release
+  hosts: ceph
+  gather_facts: no
+  serial: 1
+  tasks:
+    - name: Run yum update
+      yum: name=* state=latest update_cache=yes
+    - name: Restart monitors
+      service: name=ceph-mon.target state=restarted
+    - name: Restart managers
+      service: name=ceph-mgr.target state=restarted
+    - name: Restart OSD
+      service: name=ceph-osd.target state=restarted
+

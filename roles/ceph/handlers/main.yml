@@ -1,0 +1,10 @@
+- name: restart ceph-mon
+  service: name=ceph-mon.target state=restarted
+  listen: "restart ceph"
+- name: restart ceph-mgr
+  service: name=ceph-mgr.target state=restarted
+  listen: "restart ceph"
+- name: restart ceph-osd
+  service: name=ceph-osd.target state=restarted
+  listen: "restart ceph"
+
