@@ -1,27 +1,24 @@
+[home]
+jupiter.valhalla
+castle.valhalla
+black.valhalla
+ghost.valhalla
+
 [centos]
 thor.deathsfolly.net
 jupiter.valhalla
 influx.deathsfolly.net ansible_host=10.100.0.117
 castle.valhalla
 tor1.deathsfolly.net ansible_host=10.100.0.125
-black.valhalla ansible_host=192.168.1.75
+black.valhalla
 war.deathsfolly.net
 ash-t3x-pro-srv3.imhadmin.net
 ghost.valhalla
-netbox.deathsfolly.net ansible_host=10.100.0.129
 www1.deathsfolly.net ansible_host=10.100.0.130
-mail.andwanttoseezachnaked.info ansible_host=10.100.0.131
-centos1.lab.deathsfolly.net ansible_host=10.100.1.15
 nessus.deathsfolly.net ansible_host=10.100.0.132
 
 [router]
 10.100.0.1 ansible_network_os=vyos ansible_user=cross
 
 [kvm]
-black.valhalla
 war.deathsfolly.net
-ghost.valhalla
-
-[ceph]
-black.valhalla
-ghost.valhalla

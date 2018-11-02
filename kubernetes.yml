@@ -1,4 +1,0 @@
-- name: Push kubernetes role
-  hosts: kubernetes
-  roles:
-    - kubernetes

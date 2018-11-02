@@ -14,6 +14,14 @@
   notify:
   - restart sshd
 
+- name: Install chrony.conf
+  template: src=chrony.conf.j2
+    dest=/etc/chrony.conf
+    backup=yes
+    owner=0 group=0 mode=0644
+  notify:
+  - restart chronyd
+
 - name: Install InfluxDB repo
   copy:
     src: influxdb.repo

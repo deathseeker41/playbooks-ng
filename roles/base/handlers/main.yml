@@ -5,3 +5,5 @@
   service: name=network state=restarted
 - name: reload telegraf
   service: name=telegraf state=reloaded
+- name: restart chronyd
+  service: name=chronyd state=restarted
