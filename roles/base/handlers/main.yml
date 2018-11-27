@@ -7,3 +7,5 @@
   service: name=telegraf state=reloaded
 - name: restart chronyd
   service: name=chronyd state=restarted
+- name: restart iptables
+  service: name=iptables state=restarted

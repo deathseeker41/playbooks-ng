@@ -1,6 +1,6 @@
 [global_tags]
 [agent]
-  interval = "10s"
+  interval = "30s"
   round_interval = true
   metric_batch_size = 1000
   metric_buffer_limit = 10000
@@ -38,11 +38,12 @@
 [[inputs.net]]
 [[inputs.netstat]]
 [[inputs.linux_sysctl_fs]]
-[[inputs.interrupts]]
 
 {% if ansible_virtualization_type == 'openvz' and ansible_virtualization_role == 'guest' -%}
 {% else -%}
 [[inputs.diskio]]
+[[inputs.chrony]]
+[[inputs.interrupts]]
 {% endif -%}
 
 {% if ansible_virtualization_role == 'host' -%}
