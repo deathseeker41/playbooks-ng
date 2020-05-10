@@ -1,3 +1,0 @@
-- name: Load config
-  vyos_config:
-    src: config.j2

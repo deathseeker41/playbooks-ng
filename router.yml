@@ -1,6 +1,0 @@
-- name: Push base role
-  hosts: router
-  connection: local
-  gather_facts: no
-  roles:
-    - router

@@ -1,23 +1,7 @@
 [home]
 jupiter.valhalla
-castle.valhalla
-#black.valhalla
-ghost.valhalla
 
 [centos]
 thor.deathsfolly.net
 jupiter.valhalla
-influx.deathsfolly.net ansible_host=10.100.0.117
-castle.valhalla
-tor1.deathsfolly.net ansible_host=10.100.0.125
-#black.valhalla
-war.deathsfolly.net
-ash-t3x-pro-srv3.imhadmin.net
-ghost.valhalla
-www1.deathsfolly.net ansible_host=10.100.0.130
-
-[router]
-10.100.0.1 ansible_network_os=vyos ansible_user=cross
-
-[kvm]
-war.deathsfolly.net
+nomad.deathsfolly.net

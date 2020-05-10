@@ -1,2 +1,1 @@
 - import_playbook: base.yml
-- import_playbook: kvm.yml
